@@ -15,7 +15,7 @@ def test_user_create():
 @pytest.mark.django_db
 def test_transaction_create(create_user):
     user = create_user()
-    transaction = Transaction(user=user, type='exit', value='some value')
+    transaction = Transaction(user=user, type='exit', value=10)
     transaction.save()
 
     assert Transaction.objects.count() == 1

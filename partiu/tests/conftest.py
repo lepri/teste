@@ -2,6 +2,8 @@ import uuid
 
 import pytest
 
+from partiu.models import Transaction
+
 
 @pytest.fixture
 def password():
@@ -17,6 +19,17 @@ def create_user(db, django_user_model, password):
         return django_user_model.objects.create_user(**kwargs)
 
     return make_user
+
+
+@pytest.fixture
+def create_transaction(db, create_user):
+    def make_transaction(**kwargs):
+        if not kwargs['user']:
+            kwargs['user'] = create_user()
+        transaction = Transaction(**kwargs).save()
+        return transaction
+
+    return make_transaction
 
 
 @pytest.fixture
