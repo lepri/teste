@@ -1,0 +1,25 @@
+import uuid
+
+import pytest
+
+
+@pytest.fixture
+def password():
+   return 'some_password'
+
+
+@pytest.fixture
+def create_user(db, django_user_model, password):
+    def make_user(**kwargs):
+        kwargs['password'] = password
+        if 'email' not in kwargs:
+            kwargs['email'] = "{}@gmail.com".format(str(uuid.uuid4()))
+        return django_user_model.objects.create_user(**kwargs)
+
+    return make_user
+
+
+@pytest.fixture
+def api_client():
+   from rest_framework.test import APIClient
+   return APIClient()
